@@ -1,0 +1,53 @@
+---
+title: "assessment 1.1"
+author: "Kishan Goonewardane s4647535"
+date: "16/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R Markdown editing 
+
+
+*R Markdown* is a markdown-based authoring syntax that blends the simplicity of Markdown with the mathematical programming language R. An R Markdown text or presentation intertwines calculation, performance, and written analysis, resulting in openness, **consistency**, and an implicit invitation to replicate.
+
+[links](https://rmarkdown.rstudio.com/lesson-8.html)
+
+```{r}
+library(tidyverse)
+
+fast_food<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
+```
+
+#step
+
+```{r}
+fast_food%>%head(10)
+
+calories<-fast_food$calories
+
+```
+
+#step
+```{r}
+
+library(dplyr)
+```
+
+#step
+```{r}
+fast_food%>%filter(calories > 1000)
+```
+
+#step 
+```{r}
+`dont_eat_this`<-fast_food%>%filter(total_fat>40, total_carb>80)
+```
+
+
+
+
+
