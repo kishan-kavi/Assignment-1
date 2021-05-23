@@ -1,0 +1,95 @@
+---
+title: "Assessment 1.2"
+author: "Kishan Goonewardane"
+date: "22/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Question 2 - Create the heading of the first level and call it Data wrangling
+# Data Wrangling 
+
+Question 3 - Insert an R chunk and create a variable with this dataset
+```{r} 
+
+install.packages("tidyverse")
+
+fastfood<-read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv')
+
+install.packages('skimr')
+  
+```
+
+
+
+Question 4 - Show the number of observations for each restaurant.
+
+```{r}
+
+fastfood%>%count(restaurant)
+```
+
+
+Question 5 - Calculate and display the average number of calories for each restaurant.
+
+```{r}
+
+fastfood%>%group_by(restaurant)%>%summarise(avarage_calories=mean(calories))%>%ungroup()
+
+```
+
+
+
+Question 6 - Add a variable to the dataset, which calculates the average calories per type of restaurant and call it `average_calories`
+
+```{r}
+
+avarage_calories<-fastfood%>%group_by(restaurant)%>%summarise(avarage_calories=mean(calories))%>%ungroup()
+
+```
+
+
+
+Question 7 - Display the data vis of total fat per each type of restaurant. Write a narration (2-3 sentences) why you believe this type of data viz presents such information best. **
+
+```{r}
+
+fastfood%>%ggplot(aes(total_fat))+geom_histogram()+facet_wrap(vars(restaurant))
+
+```
+When presenting data to a wider audience, it is always beneficial to present the data in a visual manner. This allows the presenter gauge the attention of the audience and present the data in a timely manner. 
+
+
+
+Question 8 - Display the count of observations per each type of restaurant
+ 
+
+```{r}
+
+fastfood%>%ggplot(aes(total_fat))+geom_histogram()
+
+```
+
+
+
+Question 9 - Add a variable to the dataset, which calculates the maximum total fat per type of restaurant and call it `max_total_fat`
+
+```{r}
+
+max_total_fat<-fastfood%>%group_by(restaurant)%>%mutate(max_total_fat=max(total_fat))%>%select(restaurant,max_total_fat)%>%ungroup()
+
+```
+
+
+
+Question 10 - Use observations for Mcdonalds to plot sugar variable against protein with `geom_point()` 
+
+
+```{r} 
+
+fastfod%>%filter(restaurant=="McDonalds")%>%ggplot(aes(x=restaurant, y=sugar)) + geom_point
+
+```
