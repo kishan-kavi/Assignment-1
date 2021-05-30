@@ -1,0 +1,118 @@
+---
+title: "Assessment 1.3"
+author: "Kishan Goonewardane"
+date: "30/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Question 1 
+
+```{r}
+
+fastfood<-readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv')
+
+```
+
+## Question 2 - Using `skimr` package provide a list of variables which types needs to be changed 
+Use R function to identify the types of variables. What changes do you need to do to correctly record the types of variables? 
+Does all variables have sufficient range (=variability) to be included? Which variable can be removed?
+ 
+
+```{r}
+install.packages("skim")
+
+library(tidyverse)
+library(skimr)
+library(lubridate)
+
+summary(fastfood)
+skim(fastfood)
+
+```
+
+From the initially given data set 3 variable were coded under the incorrect class. 
+restaurant, item, salad were all coded as characters but they are factors in this data set.
+
+
+
+## Question 3 - Identify variable(s) which should be factors and transform their type into a factor variable.
+
+```{r}
+fastfood$restaurant<-as_factor(fastfood$restaurant)
+
+fastfood$item<-as_factor(fastfood$item)
+
+fastfood$salad<-as_factor(fastfood$salad)
+```
+
+
+## Question 4 - Replace NA in the dataset with 0 across all variables
+
+
+```{r}
+
+fastfood[is.na(fastfood)]<-0
+
+skim(fastfood)
+summary(fastfood)
+
+```
+
+
+## Quesion 5 - Create two new variables:
+
+Read about `cut_number()` function using Help and add a new variable to the dataset `calories_type`. Use the function arguments to add labels `c("low", "med", "high")` and make the dataset ordered. 
+
+
+```{r}
+
+fastfood <-fastfood %>% mutate(calories_type=cut_number(calories, 3, lables = c("low", "med", "high")))
+
+skim(fastfood)
+```
+
+
+## Questin 6 - Create a dataviz that shows the distribution of `calories_type` in food items for each type of restaurant. Think carefully about the choice of data viz. Use facets, coordinates and theme layers to make your data viz visually appealing and meaningful. Use factors related data viz functions.
+
+```{r}
+
+fastfood %>%
+  ggplot(aes(x=calories_type,
+  fill = calories_type))+
+  geom_bar(width=0.5)+
+  facet_wrap(~restaurant)+
+  coord_flip()
+  
+```
+
+
+## Question 7 -  The second variable should show the percentage of `trans_fat` in `total_fat`. Add the variable to the dataset and call it `trans_fat_percent`. Do not forget to save the updated dataset. 
+
+```{r}
+
+fastfood<-fastfood%>%
+  mutate(total_fat=sum(trans_fat), 
+  percent = trans_fat/total_fat, 
+  answer_integer = as.integer(restaurant), 
+  avarage=sum(answer_integer*percent) %>% 
+    ungroup
+
+```
+
+
+## Question 8 - Create a dataviz that shows the distribution of `trans_fat` in food items for each type of restaurant. Think carefully about the choice of data viz. Use facets, coordinates and theme layers to make your data viz visually appealing and meaningful.
+
+```{r}
+
+fastfood%>%
+  ggplot(aes(trans_fat))+
+  geom_bar(width =0.5)+
+  facet_wrap(~restaurant)+
+  theme_minimal()
+
+```
